@@ -1,40 +1,34 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-import authRoutes from './routes/authRoutes.js';
-import sessionRoutes from './routes/sessionRoutes.js';
-
-// Load .env variables
-dotenv.config();
+const authRoutes = require('./routes/authRoutes');
+const sessionRoutes = require('./routes/sessionRoutes');
 
 const app = express();
 
 // Middleware
-app.use(cors()); // You can pass origin config here if needed
+app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api', authRoutes);
-app.use('/api', sessionRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/sessions', sessionRoutes);
 
-// MongoDB Connection
+// DB Connection
 const PORT = process.env.PORT || 5000;
-console.log("🌐 MONGO_URI:", process.env.MONGO_URI);
+const MONGO_URI = process.env.MONGO_URI;
+
+console.log('🌐 MONGO_URI:', MONGO_URI);
 
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
     console.error('❌ MongoDB Connection Error:', err.message);
-    process.exit(1); // Optional: stop server if DB fails
   });
