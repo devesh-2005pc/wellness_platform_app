@@ -1,0 +1,10 @@
+{
+  "totalSessions": 25,
+  "draftSessions": 10,
+  "publishedSessions": 15,
+  "chartData": {
+    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "draft": [2, 3, 1, 2, 0, 1, 1],
+    "published": [1, 2, 3, 2, 4, 2, 1]
+  }
+}

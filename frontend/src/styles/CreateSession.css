@@ -1,0 +1,56 @@
+.create-session-container {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 30px;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+}
+
+.create-session-container h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #333;
+}
+
+.create-session-container input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: border 0.3s;
+}
+
+.create-session-container input:focus {
+  border-color: #7c3aed;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+.create-session-container button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #7c3aed, #9333ea);
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.create-session-container button:hover {
+  background: linear-gradient(to right, #6d28d9, #7c3aed);
+}
+
+.message {
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 500;
+  color: #333;
+}
