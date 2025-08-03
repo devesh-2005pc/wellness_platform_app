@@ -1,15 +1,14 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   getPublicSessions,
   getUserSessions,
   getSessionById,
   saveDraft,
   publishSession,
-  getSessionStats // ✅ ADD THIS
-} from '../controllers/sessionController.js';
+  getSessionStats,
+} = require('../controllers/sessionController');
 
-
-import authMiddleware from '../middleware/authMiddleware.js';
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -20,4 +19,4 @@ router.post('/my-sessions/save-draft', authMiddleware, saveDraft);
 router.post('/my-sessions/publish', authMiddleware, publishSession);
 router.get('/sessions/stats', authMiddleware, getSessionStats);
 
-export default router;
+module.exports = router;
