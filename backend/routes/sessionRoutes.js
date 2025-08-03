@@ -1,22 +1,25 @@
-const express = require('express');
-const {
+import express from 'express';
+const router = express.Router();
+
+import {
   getPublicSessions,
   getUserSessions,
   getSessionById,
   saveDraft,
   publishSession,
-  getSessionStats,
-} = require('../controllers/sessionController');
+  getSessionStats
+} from '../controllers/sessionController.js';
 
-const authMiddleware = require('../middleware/authMiddleware');
+import authMiddleware from '../middleware/authMiddleware.js';
 
-const router = express.Router();
+// Public sessions
+router.get('/public', getPublicSessions);
 
-router.get('/sessions', getPublicSessions);
-router.get('/my-sessions', authMiddleware, getUserSessions);
-router.get('/my-sessions/:id', authMiddleware, getSessionById);
-router.post('/my-sessions/save-draft', authMiddleware, saveDraft);
-router.post('/my-sessions/publish', authMiddleware, publishSession);
-router.get('/sessions/stats', authMiddleware, getSessionStats);
+// User-specific (authenticated) sessions
+router.get('/user', authMiddleware, getUserSessions);
+router.get('/stats', authMiddleware, getSessionStats);
+router.get('/:id', authMiddleware, getSessionById);
+router.post('/save', authMiddleware, saveDraft);
+router.post('/publish', authMiddleware, publishSession);
 
-module.exports = router;
+export default router;

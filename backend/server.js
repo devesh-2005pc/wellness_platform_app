@@ -1,9 +1,14 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+// server.js (ES Module version)
 
-const authRoutes = require('./routes/authRoutes');
-const sessionRoutes = require('./routes/sessionRoutes');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+import authRoutes from './routes/authRoutes.js';
+import sessionRoutes from './routes/sessionRoutes.js';
+
+dotenv.config(); // Load .env file
 
 const app = express();
 
