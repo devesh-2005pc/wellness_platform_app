@@ -80,6 +80,7 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+}// Trigger redeploy on Vercel
+
 
 export default App;
