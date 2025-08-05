@@ -5,7 +5,7 @@ const API_BASE_URL =
   'https://wellness-backend-k3gz.onrender.com';
 
 const instance = axios.create({
-  baseURL: API_BASE_URL ,
+  baseURL: API_BASE_URL + '/api/auth' ,
 });
 
 instance.interceptors.request.use(
