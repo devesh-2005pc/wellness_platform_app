@@ -17,9 +17,10 @@ function Dashboard() {
       try {
         setLoading(true);
         setError(null);
-        // Use axios instance baseURL + auth header
-        const res = await axios.get('/sessions/stats');
-        // Expecting { total, drafts, published }
+        // NOTE: call the full mounted API path (backend mounts at /api/sessions)
+        console.log('Fetching session stats from /api/sessions/stats');
+        const res = await axios.get('/api/sessions/stats'); // <- changed to include /api
+        console.log('session stats response:', res.data);
         setSessionStats(res.data || { total: 0, drafts: 0, published: 0 });
       } catch (err) {
         console.error('Error fetching session stats:', err);

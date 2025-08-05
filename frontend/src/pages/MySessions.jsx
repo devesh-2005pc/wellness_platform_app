@@ -1,8 +1,7 @@
 // src/pages/MySessions.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/MySessions.css';
-// use your axios instance (important for baseURL + auth header)
-import axios from '../api/axios';
+import axios from '../api/axios'; // use axios instance with auth + baseURL if any
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,8 +17,10 @@ function MySessions() {
       try {
         setLoading(true);
         setError(null);
-        // <-- correct protected route according to your server routes
-        const res = await axios.get('/sessions/user');
+        // NOTE: correct protected route with /api prefix
+        console.log('Fetching my sessions from /api/sessions/user');
+        const res = await axios.get('/api/sessions/user'); // <- changed to include /api
+        console.log('my sessions response:', res.data);
         const all = res.data || [];
         setDrafts(all.filter(session => session.status === 'draft'));
         setPublished(all.filter(session => session.status === 'published'));
@@ -91,7 +92,7 @@ function MySessions() {
               <div
                 key={p._id}
                 className="session-list-item"
-                onClick={() => navigate(`/view-session/${p._id}`)} // or /edit-session if published should be editable
+                onClick={() => navigate(`/view-session/${p._id}`)} // adjust route if you want /edit-session
                 style={{ cursor: 'pointer' }}
                 role="button"
                 tabIndex={0}
