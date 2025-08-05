@@ -10,7 +10,7 @@ function CreateSession() {
 
   const handleCreate = async () => {
     try {
-      const res = await axios.post('/api/my-sessions/save-draft', {
+      const res = await axios.post('/api/sessions/save', {
         title,
         tags: tags.split(',').map((tag) => tag.trim()),
         json_file_url: jsonFileUrl,

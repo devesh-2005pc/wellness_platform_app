@@ -12,7 +12,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('/api/my-sessions/stats'); // ✅ Use user-specific stats route
+        const res = await axios.get('/api/sessions/stats'); // ✅ Use user-specific stats route
         setSessionStats(res.data || { total: 0, drafts: 0, published: 0 });
       } catch (err) {
         console.error('Error fetching session stats:', err);
