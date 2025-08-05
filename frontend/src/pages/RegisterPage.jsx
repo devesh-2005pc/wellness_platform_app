@@ -1,6 +1,7 @@
+// frontend/src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import '../styles/RegisterPage.css';
-import axios from '../api/axios'; // ✅ Using our axios instance
+import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 function RegisterPage() {
@@ -11,8 +12,7 @@ function RegisterPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      // <-- changed to /auth/register
-      await axios.post('/auth/register', { email, password });
+      await axios.post('/api/auth/register', { email, password });
       alert('✅ Registered successfully!');
       navigate('/login');
     } catch (err) {

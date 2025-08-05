@@ -1,6 +1,7 @@
+// frontend/src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
-import axios from '../api/axios'; // ✅ Axios instance (baseURL -> /api)
+import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
@@ -11,8 +12,7 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // <-- changed to /auth/login
-      const res = await axios.post('/auth/login', { email, password });
+      const res = await axios.post('/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       alert('✅ Logged in successfully!');
       navigate('/dashboard');
