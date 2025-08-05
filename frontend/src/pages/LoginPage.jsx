@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/LoginPage.css';
-import axios from '../api/axios'; // ✅ Axios instance
+import axios from '../api/axios'; // ✅ Axios instance (baseURL -> /api)
 import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
@@ -11,7 +11,8 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/login', { email, password });
+      // <-- changed to /auth/login
+      const res = await axios.post('/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       alert('✅ Logged in successfully!');
       navigate('/dashboard');
