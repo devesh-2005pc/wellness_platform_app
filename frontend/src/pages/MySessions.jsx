@@ -1,21 +1,33 @@
+// src/pages/MySessions.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/MySessions.css';
-import axios from 'axios';
+// use your axios instance (important for baseURL + auth header)
+import axios from '../api/axios';
 import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 function MySessions() {
   const [drafts, setDrafts] = useState([]);
   const [published, setPublished] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMySessions = async () => {
       try {
-        const res = await axios.get('/api/my-sessions');
+        setLoading(true);
+        setError(null);
+        // <-- correct protected route according to your server routes
+        const res = await axios.get('/sessions/user');
         const all = res.data || [];
         setDrafts(all.filter(session => session.status === 'draft'));
         setPublished(all.filter(session => session.status === 'published'));
-      } catch (error) {
-        console.error('Error fetching sessions:', error);
+      } catch (err) {
+        console.error('Error fetching sessions:', err);
+        setError(err.response?.data?.message || err.message || 'Failed to load sessions');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -29,6 +41,9 @@ function MySessions() {
     { name: 'Published', value: published.length },
   ];
 
+  if (loading) return <div className="mysessions-container"><p>Loading your sessions…</p></div>;
+  if (error) return <div className="mysessions-container"><p className="error">Error: {error}</p></div>;
+
   return (
     <div className="mysessions-container">
       <h2 className="mysessions-heading">📋 My Wellness Sessions</h2>
@@ -38,6 +53,23 @@ function MySessions() {
           <h3>Drafted Sessions</h3>
           <p className="session-count">{drafts.length}</p>
           {drafts[0] && <p className="latest-title">📝 Latest: {drafts[0].title}</p>}
+
+          <div className="session-list">
+            {drafts.map((d) => (
+              <div
+                key={d._id}
+                className="session-list-item"
+                onClick={() => navigate(`/edit-session/${d._id}`)}
+                style={{ cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/edit-session/${d._id}`); }}
+              >
+                {d.title || 'Untitled draft'}
+              </div>
+            ))}
+            {drafts.length === 0 && <p>No drafts yet — create one!</p>}
+          </div>
 
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={drafts.map((d, i) => ({ name: `Draft ${i + 1}`, length: d.content?.length || 0 }))}>
@@ -53,6 +85,23 @@ function MySessions() {
           <h3>Published Sessions</h3>
           <p className="session-count">{published.length}</p>
           {published[0] && <p className="latest-title">✅ Latest: {published[0].title}</p>}
+
+          <div className="session-list">
+            {published.map((p) => (
+              <div
+                key={p._id}
+                className="session-list-item"
+                onClick={() => navigate(`/view-session/${p._id}`)} // or /edit-session if published should be editable
+                style={{ cursor: 'pointer' }}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/view-session/${p._id}`); }}
+              >
+                {p.title || 'Untitled session'}
+              </div>
+            ))}
+            {published.length === 0 && <p>No published sessions yet.</p>}
+          </div>
 
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>

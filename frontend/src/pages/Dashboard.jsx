@@ -1,23 +1,34 @@
+// src/pages/Dashboard.jsx
 import React, { useEffect, useState } from 'react';
 import '../styles/Dashboard.css';
 import { FaChartBar, FaPen, FaCheckCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import axios from '../api/axios'; // ✅ Use secured Axios
+import axios from '../api/axios'; // your axios instance (baseURL + auth)
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 function Dashboard() {
   const [sessionStats, setSessionStats] = useState({ total: 0, drafts: 0, published: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get('/api/sessions/stats'); // ✅ Use user-specific stats route
+        setLoading(true);
+        setError(null);
+        // Use axios instance baseURL + auth header
+        const res = await axios.get('/sessions/stats');
+        // Expecting { total, drafts, published }
         setSessionStats(res.data || { total: 0, drafts: 0, published: 0 });
       } catch (err) {
         console.error('Error fetching session stats:', err);
+        setError(err.response?.data?.message || err.message || 'Failed to load stats');
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchStats();
   }, []);
 
@@ -56,14 +67,23 @@ function Dashboard() {
 
       <div className="chart-section">
         <h3 className="chart-title">Session Overview</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="value" fill="#00e6f6" />
-          </BarChart>
-        </ResponsiveContainer>
+
+        {loading ? (
+          <p>Loading chart…</p>
+        ) : error ? (
+          <p className="error">Error loading chart: {error}</p>
+        ) : (sessionStats.total === 0 && sessionStats.drafts === 0 && sessionStats.published === 0) ? (
+          <p>No session data yet — create a session to populate the overview.</p>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Bar dataKey="value" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
     </div>
   );
